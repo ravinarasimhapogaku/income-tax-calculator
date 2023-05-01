@@ -1,0 +1,117 @@
+
+from tkinter import *
+from tkinter import messagebox
+from tkinter.ttk import Combobox
+from datetime import datetime
+
+def calculate_age(born):
+    today = datetime.now()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+def submit():
+    if not name_entry.get():
+        messagebox.showerror("Error", "Please enter your name")
+        return
+    if not var.get():
+        messagebox.showerror("Error", "Please select your gender")
+        return
+    if not state_var.get():
+        messagebox.showerror("Error", "Please select your state")
+        return
+    if not occupation_var.get():
+        messagebox.showerror("Error", "Please select your occupation")
+        return
+    if not dob_entry.get():
+        messagebox.showerror("Error", "Please enter your date of birth")
+        return
+    if not pan_entry.get():
+        messagebox.showerror("Error", "Please enter your PAN card number")
+        return
+    if not agree_var.get():
+        messagebox.showerror("Error", "Please agree to the tax rules and regulations")
+        return
+
+    dob = datetime.strptime(dob_entry.get(), '%Y-%m-%d')
+    age = calculate_age(dob)
+    if age < 18 or age > 70:
+        messagebox.showerror("Error", "Not eligible for income tax guidelines")
+        return
+
+    top = Toplevel(root)
+    top.title("Income Tax Calculator")
+
+    Label(top, text="Income Tax Calculator", font=("Times New Roman", 50)).pack()
+
+    Label(top, text="Enter your monthly income:").pack()
+    income_entry = Entry(top)
+    income_entry.pack()
+
+    def calculate_tax():
+        annual_income = int(income_entry.get()) * 12
+        Label(top, text=f"Your annual income is: {annual_income}").pack()
+
+        tax = 0
+        if annual_income <= 250000:
+            tax = 0
+        elif annual_income <= 500000:
+            tax = (annual_income - 250000) * 0.05
+        elif annual_income <= 1000000:
+            tax = (annual_income - 500000) * 0.2 + 12500
+        else:
+            tax = (annual_income - 1000000) * 0.3 + 112500
+
+        Label(top, text=f"Your income tax is: {tax}").pack()
+
+    Button(top, text="Calculate Tax", command=calculate_tax).pack()
+
+root = Tk()
+root.title("Income Tax Calculation Portal")
+
+canvas = Canvas(root)
+frame = Frame(canvas)
+frame.pack(pady=20)
+
+canvas.create_window((0,0), window=frame, anchor="center")
+
+frame = Frame(root)
+frame.pack()
+
+Label(frame, text="Welcome to Income Tax Calculation Portal", font=("Times New Roman", 50)).grid(row=0, column=1)
+
+Label(frame, text="Name of the citizen:").grid(row=1, column=0)
+name_entry = Entry(frame)
+name_entry.grid(row=1, column=1)
+
+Label(frame, text="Gender:").grid(row=2, column=0)
+var = StringVar(value=None)
+Radiobutton(frame, text="Male", variable=var, value="Male").grid(row=2, column=1)
+Radiobutton(frame, text="Female", variable=var, value="Female").grid(row=3, column=1)
+
+Label(frame,text="State:").grid(row=4,column=0)
+state_var = StringVar()
+state_combobox = Combobox(frame,textvariable=state_var)
+state_combobox['values'] = ("Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal")
+state_combobox.grid(row=4,column=1)
+
+Label(frame,text="Occupation:").grid(row=5,column=0)
+occupation_var = StringVar()
+occupation_combobox = Combobox(frame,textvariable=occupation_var)
+occupation_combobox['values'] = ("Agriculture", "Public sector", "Private sector")
+occupation_combobox.grid(row=5,column=1)
+
+def on_select(event):
+    if event.widget.get() == "Agriculture":
+        messagebox.showwarning("Warning", "Under Section 10 (1) of the Income Tax Act, 1961, any income generated from any agricultural activities are exempted from being taxed by the Government.")
+
+occupation_combobox.bind('<<ComboboxSelected>>', on_select)
+
+Label(frame,text="Date of Birth:").grid(row=6,columnspan=1)
+dob_entry = Entry(frame)
+dob_entry.grid(row=6,column=1)
+
+agree_var = IntVar(value=0)
+Checkbutton(frame,text="I agree to all the tax rules and regulations act.",variable=agree_var).grid(row=8,columnspan=3)
+
+Button(frame,text="Submit",command=submit).grid(row=9,columnspan=3)
+
+root.mainloop()
