@@ -1,0 +1,83 @@
+from tkinter import *
+
+def check_info():
+    if int(age_entry.get()) >= 18:
+        info_window = Toplevel(root)
+        info_window.title("Information Accepted")
+
+        global pan_entry
+        global income_entry
+        global tax_label
+
+        pan_label = Label(info_window, text="PAN Card Details:")
+        pan_entry = Entry(info_window)
+        income_label = Label(info_window, text="Monthly Income:")
+        income_entry = Entry(info_window)
+        calculate_button = Button(info_window, text="Calculate", command=calculate_tax)
+        tax_label = Label(info_window, text="")
+        
+        pan_label.pack()
+        pan_entry.pack()
+        income_label.pack()
+        income_entry.pack()
+        calculate_button.pack()
+        tax_label.pack()
+        
+# Create a canvas
+canvas = Canvas(root, width=300, height=200)
+canvas.pack()
+
+# Open the image file
+img = Image.open("background.jpg")
+# Resize the image to fit the canvas
+img = img.resize((300, 200), Image.ANTIALIAS)
+# Create a PhotoImage object from the image
+img = ImageTk.PhotoImage(img)
+# Add the image to the canvas
+canvas.create_image(0, 0, anchor=NW, image=img)
+
+def calculate_tax():
+    annual_income = int(income_entry.get()) * 12
+    if annual_income <= 300000:
+        tax = 0
+    elif annual_income <= 600000:
+        tax = (annual_income - 300000) * 0.05
+    elif annual_income <= 900000:
+        tax = (annual_income - 600000) * 0.1 + 15000
+    elif annual_income <= 1200000:
+        tax = (annual_income - 900000) * 0.15 + 45000
+    elif annual_income <= 1500000:
+        tax = (annual_income - 1200000) * 0.2 + 90000
+    else:
+        tax = (annual_income - 1500000) * 0.3 + 150000
+    tax_label.config(text=f"Income Tax: {tax}")
+
+root = Tk()
+root.title("Information")
+
+name_label = Label(root, text="Name:")
+name_entry = Entry(root)
+state_label = Label(root, text="State:")
+state_var = StringVar(root)
+state_var.set("Select State")
+state_options = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"]
+state_menu = OptionMenu(root, state_var, *state_options)
+revenue_district_label = Label(root, text="Revenue District:")
+revenue_district_entry = Entry(root)
+age_label = Label(root, text="Age:")
+age_entry = Entry(root)
+submit_button = Button(root, text="Submit", command=check_info)
+error_label = Label(root, text="")
+
+name_label.pack()
+name_entry.pack()
+state_label.pack()
+state_menu.pack()
+revenue_district_label.pack()
+revenue_district_entry.pack()
+age_label.pack()
+age_entry.pack()
+submit_button.pack()
+error_label.pack()
+
+root.mainloop()
