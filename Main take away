@@ -1,0 +1,145 @@
+from tkinter import *
+from tkinter import messagebox
+from tkinter import font
+
+root = Tk()
+root.title("User Form")
+
+# Set font
+my_font = font.Font(family="Times New Roman", size=16)
+
+# Title label
+title_label = Label(root, text="User Form", font=my_font)
+title_label.grid(row=0, column=0, columnspan=2)
+
+# Name label and entry
+name_label = Label(root, text="Name:", font=my_font)
+name_label.grid(row=1, column=0)
+name_entry = Entry(root, font=my_font)
+name_entry.grid(row=1, column=1)
+
+# Gender label and check buttons
+gender_label = Label(root, text="Gender:", font=my_font)
+gender_label.grid(row=2, column=0)
+male_var = IntVar()
+Checkbutton(root, text="Male", variable=male_var, font=my_font).grid(row=2, column=1)
+female_var = IntVar()
+Checkbutton(root, text="Female", variable=female_var, font=my_font).grid(row=3, column=1)
+
+# State label and option menu
+state_label = Label(root, text="State:", font=my_font)
+state_label.grid(row=4, column=0)
+state_var = StringVar()
+state_var.set("Select State")
+state_option_menu = OptionMenu(root, state_var,
+                               "Andhra Pradesh",
+                               "Arunachal Pradesh",
+                               "Assam",
+                               "Bihar",
+                               "Chhattisgarh",
+                               "Goa",
+                               "Gujarat",
+                               "Haryana",
+                               "Himachal Pradesh",
+                               "Jharkhand",
+                               "Karnataka",
+                               "Kerala",
+                               "Madhya Pradesh",
+                               "Maharashtra",
+                               "Manipur",
+                               "Meghalaya",
+                               "Mizoram",
+                               "Nagaland",
+                               "Odisha",
+                               "Punjab",
+                               "Rajasthan",
+                               "Sikkim",
+                               "Tamil Nadu",
+                               "Telangana",
+                               "Tripura",
+                               "Uttar Pradesh",
+                               "Uttarakhand",
+                               "West Bengal")
+state_option_menu.config(font=my_font)
+state_option_menu.grid(row=4, column=1)
+
+# City label and entry
+city_label = Label(root, text="City:", font=my_font)
+city_label.grid(row=5, column=0)
+city_entry = Entry(root, font=my_font)
+city_entry.grid(row=5, column=1)
+
+# Age label and entry
+age_label = Label(root, text="Age:", font=my_font)
+age_label.grid(row=6,column=0)
+age_entry = Entry(root, font=my_font)
+age_entry.grid(row=6,column=1)
+
+
+
+# Terms and conditions check button
+terms_var = IntVar()
+Checkbutton(root,text="I agree to the terms and conditions",variable=terms_var).grid(row=9,columnspan=2)
+
+def submit():
+    if not name_entry.get() or not (male_var.get() or female_var.get()) or state_var.get() == 'Select State' or not city_entry.get() or not age_entry.get():
+        messagebox.showwarning("Warning", "Please fill all entries")
+    elif int(age_entry.get()) < 18:
+        messagebox.showwarning("Warning", "Age must be greater than or equal to 18")
+    elif not terms_var.get():
+        messagebox.showwarning("Warning", "Please agree to the terms and conditions")
+    else:
+        gender = 'Male' if male_var.get() else 'Female'
+        messagebox.showinfo("Success", f"Name: {name_entry.get()}\nGender: {gender}\nState: {state_var.get()}\nCity: {city_entry.get()}\nAge: {age_entry.get()}\nMonthly Income:{income_entry.get()}")
+
+def reset():
+    
+    name_entry.delete(0,'end')
+    male_var.set(0)
+    female_var.set(0)
+    state_var.set("Select State")
+    city_entry.delete(0,'end')
+    age_entry.delete(0,'end')
+    income_entry.delete(0,'end')
+    terms_var.set(0)
+    
+
+# Submit button
+submit_button = Button(root,text="Submit",command=submit)
+submit_button.grid(row=11,columnspan=2)
+
+# Monthly Income label and entry
+income_label = Label(root, text="Monthly Income:", font=my_font)
+income_label.grid(row=8, column=0)
+income_entry = Entry(root, font=my_font)
+income_entry.grid(row=8, column=1)
+
+def calculate_tax():
+    # Get the monthly income from the entry
+    monthly_income = float(income_entry.get())
+    
+    # Calculate the annual income
+    annual_income = monthly_income * 12
+    
+    # Calculate the tax based on the annual income
+    if annual_income <= 250000:
+        tax = 0
+    elif annual_income <= 500000:
+        tax = (annual_income - 250000) * 0.05
+    elif annual_income <= 1000000:
+        tax = (annual_income - 500000) * 0.2 + 12500
+    else:
+        tax = (annual_income - 1000000) * 0.3 + 112500
+    
+    # Show the result in a message box
+    messagebox.showinfo("Tax", f"Annual Income: {annual_income}\nTax: {tax}") 
+    
+    # Add a button to calculate the tax
+calculate_button = Button(root, text="Calculate Tax", command=calculate_tax, font=my_font)
+calculate_button.grid(row=10, column=0, columnspan=2)
+
+# Reset button
+reset_button = Button(root,text="Reset",command=reset)
+reset_button.grid(row=12,columnspan=2)
+
+root.mainloop()
