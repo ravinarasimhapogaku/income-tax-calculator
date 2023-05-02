@@ -64,38 +64,20 @@ gender_label.grid(row=2, column=0)
 male_var = IntVar()
 Checkbutton(root, text="Male", variable=male_var, font=my_font).grid(row=2, column=1)
 female_var = IntVar()
-Checkbutton(root, text="Female", variable=female_var, font=my_font).grid(row=3, column=1)
+Checkbutton(root, text="Female", variable=female_var, font=my_font).grid(row=2, column=2)
 
 # State label and option menu
 
-options = [                    "select state","Andhra Pradesh",
-                               "Arunachal Pradesh",
-                               "Assam",
-                               "Bihar",
-                               "Chhattisgarh",
-                               "Goa",
-                               "Gujarat",
-                               "Haryana",
-                               "Himachal Pradesh",
-                               "Jharkhand",
-                               "Karnataka",
-                               "Kerala",
-                               "Madhya Pradesh",
-                               "Maharashtra",
-                               "Manipur",
-                               "Meghalaya",
-                               "Mizoram",
-                               "Nagaland",
-                               "Odisha",
-                               "Punjab",
-                               "Rajasthan",
-                               "Sikkim",
-                               "Tamil Nadu",
-                               "Telangana",
-                               "Tripura",
-                               "Uttar Pradesh",
-                               "Uttarakhand",
-                               "West Bengal"]
+options = [   "select state","Andhra Pradesh",
+              "Arunachal Pradesh","Assam","Bihar",
+            "Chhattisgarh","Goa","Gujarat","Haryana",
+            "Himachal Pradesh","Jharkhand","Karnataka",
+            "Kerala","Madhya Pradesh","Maharashtra",
+             "Manipur","Meghalaya","Mizoram",
+             "Nagaland","Odisha","Punjab",
+              "Rajasthan","Sikkim","Tamil Nadu",
+               "Telangana","Tripura","Uttar Pradesh",
+                "Uttarakhand","West Bengal"]
 combobox = ttk.Combobox(root, values=options)
 combobox.current(0)
 combobox.bind("<<ComboboxSelected>>")
@@ -160,11 +142,17 @@ def reset():
     terms_var.set(0)
     
 
+def submit():
+  dob = datetime.strptime(dob_entry.get(), '%Y-%m-%d')
+    age = calculate_age(dob)
+    if age < 18 or age > 70:
+        messagebox.showerror("Error", "Not eligible for income tax guidelines")
+        return
+
 # Submit button
 
-submit_button = Button(root,text="Submit", command=submit)
-submit_button.grid(row=11,columnspan=2)
-
+submit_button = Button(root, text="Submit", command=submit)
+submit_button.grid(row=11, column=0, columnspan=2)
 
 
 # Reset button
