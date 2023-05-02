@@ -1,0 +1,37 @@
+from tkinter import *
+
+def calculate():
+    monthly_income = float(monthly_income_entry.get())
+    annual_income = monthly_income * 12
+    annual_income_label.config(text=f"Annual Income: ₹{annual_income:.2f}")
+    
+    if annual_income <= 250000:
+        tax = 0
+    elif annual_income <= 500000:
+        tax = (annual_income - 250000) * 0.05
+    elif annual_income <= 1000000:
+        tax = (annual_income - 500000) * 0.2 + 12500
+    else:
+        tax = (annual_income - 1000000) * 0.3 + 112500
+    
+    tax_label.config(text=f"Income Tax: ₹{tax:.2f}")
+
+root = Tk()
+root.title("Income Tax Calculator")
+
+monthly_income_label = Label(root, text="Monthly Income (₹):")
+monthly_income_label.grid(row=7, column=0)
+
+monthly_income_entry = Entry(root)
+monthly_income_entry.grid(row=7, column=1)
+
+calculate_button = Button(root, text="Calculate", command=calculate)
+calculate_button.grid(row=1, column=0, columnspan=2)
+
+annual_income_label = Label(root, text="Annual Income: ₹0.00")
+annual_income_label.grid(row=2, column=0, columnspan=2)
+
+tax_label = Label(root, text="Income Tax: ₹0.00")
+tax_label.grid(row=3, column=0, columnspan=2)
+
+root.mainloop()
