@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 
 def open_new_window():
@@ -143,10 +144,20 @@ def reset():
     
 
 def submit():
-  dob = datetime.strptime(dob_entry.get(), '%Y-%m-%d')
+    dob = datetime.strptime(dob_entry.get(), '%d/%m/%Y')
     age = calculate_age(dob)
     if age < 18 or age > 70:
         messagebox.showerror("Error", "Not eligible for income tax guidelines")
+        return
+    if not name_entry.get():
+        messagebox.showerror("Error", "Please enter your name")
+        return
+   
+    if not dob_entry.get():
+        messagebox.showerror("Error", "Please enter your date of birth")
+        return
+    if not terms_var.get():
+        messagebox.showerror("Error", "Please agree to the tax rules and regulations")
         return
 
 # Submit button
